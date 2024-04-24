@@ -1,10 +1,13 @@
-import React from 'react';
-import './Popup.css';
-import Container from '../../Components/Container';
-import Form from '../../Components/Form';
+import React, { useState } from 'react';
 import Unplug from '../../../svgs/Unplug';
+import Container from '../../Components/Container';
+import Landing from '../../Components/Landing';
+import Timebomb from '../../Components/Timebomb';
 import Layout from './Layout';
+import './Popup.css';
+import { useUI } from '../../context/ui.context';
 const Popup = () => {
+  const { mode } = useUI();
   return (
     <Layout>
       <Container className='min-w-[1000px] py-5'>
@@ -13,7 +16,8 @@ const Popup = () => {
             <span className='font-medium text-white text-sm'>Unplug.me</span><Unplug />
           </p>
         </div>
-        <Form />
+        {mode === "home" && <Landing />}
+        {mode === "time-bomb" && <Timebomb />}
       </Container>
     </Layout>
   );

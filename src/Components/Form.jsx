@@ -1,15 +1,18 @@
-import { Unplug } from 'lucide'
 import { AlarmClockMinus, Link } from 'lucide-react'
 import React from 'react'
+import { useUI } from '../context/ui.context'
 
 const Form = () => {
+    const { openInfoModal } = useUI();
     return (
         <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-2xl">
-                <h1 class="text-center text-2xl font-bold text-white sm:text-6xl">Don't Let Websites Be Your Boo! </h1>
+                <h1 class="text-center text-2xl font-bold text-white sm:text-6xl">Timelock</h1>
 
                 <p class="mx-auto mt-4 max-w-md text-center text-white/50 text-lg ">
-                    Feeling overwhelmed by the internet? Take control with our website blocker and get sh*t done!
+                    Take control of your time. Set a time limit and break free from distractions. <span className='underline hover:text-white cursor-pointer' onClick={() => {
+                        openInfoModal();
+                    }}>more info</span>
                 </p>
 
                 <form action="#" class="mb-0 mt-6 space-y-4 rounded-lg p-4  sm:p-6 lg:p-8">
@@ -57,5 +60,4 @@ const Form = () => {
         </div>
     )
 }
-
 export default Form
