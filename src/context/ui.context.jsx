@@ -57,7 +57,7 @@ export function UIProvider(props) {
     const openBlockListSidebar = () => { dispatch({ type: "OPEN_BLOCK_LIST_SIDEBAR" }); }
     const closeBlockListSidebar = () => { dispatch({ type: "CLOSE_BLOCK_LIST_SIDEBAR" }); }
     const setMode = (mode) => {
-        dispatch({ type: "SET_MODE", mode })
+        dispatch({ type: "SET_MODE", mode });
     }
 
     const value = React.useMemo(

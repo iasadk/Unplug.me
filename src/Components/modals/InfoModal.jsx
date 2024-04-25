@@ -4,7 +4,20 @@ import { cn } from '../../../utils/cn'
 import { useUI } from '../../context/ui.context'
 
 const InfoModal = () => {
-    const { closeInfoModal, } = useUI();
+    const { closeInfoModal, displayInfoModal } = useUI();
+
+    if (displayInfoModal) {
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case "Escape":
+                    closeInfoModal();
+                    break;
+
+                default:
+                    break;
+            }
+        })
+    }
     return (
         <div className='backdrop-blur-3xl bg-black/60 w-full h-full absolute z-40'>
             <div className={cn("rounded-lg bg-white p-8 shadow-2xl w-[500px] absolute top-44 left-[50%] -translate-x-[50%] -translate-y-[50%]")}>

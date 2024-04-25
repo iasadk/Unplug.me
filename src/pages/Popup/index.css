@@ -13,7 +13,6 @@ body {
   /* background-filter: blur; */
 }
 
-
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -25,4 +24,23 @@ body {
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+}
+
+.swipeable-list-item__content {
+  display: block;
+}
+
+.swipeable-list-item__trailing-actions {
+  border-radius: 0 10px 10px 0;
+  background-color: rgba(255, 0, 0, 0.766);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+}
+
+.prevent-select {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

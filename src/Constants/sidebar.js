@@ -4,7 +4,7 @@ import React from 'react'
 export const sidebarContent = [
     {
         id: 1,
-        tooltipText: "Time bomb",
+        tooltipText: "Time lock",
         icon: <TimerReset className='w-5 h-5' />,
         mode: "time-bomb",
         disabled: false,

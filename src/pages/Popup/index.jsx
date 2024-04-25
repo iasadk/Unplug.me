@@ -3,7 +3,12 @@ import { createRoot } from 'react-dom/client';
 import Popup from './Popup';
 import './index.css';
 import "../../assets/styles/tailwind.css"
+import { ManagedUIContext } from '../../context/ui.context';
 
 const container = document.getElementById('app-container');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
-root.render(<Popup />);
+root.render(
+    <ManagedUIContext>
+        <Popup />
+    </ManagedUIContext>
+);

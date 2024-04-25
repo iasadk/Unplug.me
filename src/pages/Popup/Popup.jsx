@@ -8,6 +8,7 @@ import './Popup.css';
 import { useUI } from '../../context/ui.context';
 const Popup = () => {
   const { mode } = useUI();
+  console.log("POP: ", mode)
   return (
     <Layout>
       <Container className='min-w-[1000px] py-5'>

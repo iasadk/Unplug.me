@@ -3,7 +3,7 @@ import InfoModal from './InfoModal'
 import { useUI } from '../../context/ui.context'
 
 const Modals = () => {
-    const { displayInfoModal } = useUI();
+    const { displayInfoModal, mode } = useUI();
     return (
         <div >
             {displayInfoModal && <InfoModal />}
