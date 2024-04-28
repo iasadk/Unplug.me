@@ -71,13 +71,12 @@ const BlockListSidebar = () => {
     useEffect(() => {
         fetchBlockedWebsites();
     }, [displayBlockListSidebar, forceRerenderBlockList])
-    console.log(blockedWebsites.length)
     return (
         <div className={cn('h-[95%] mt-4 w-[250px] bg-white bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 text-white absolute left-[75px] -translate-x-[300px] transition-all opacity-0 rounded-lg p-2 duration-300 flex flex-col  space-y-3 overflow-y-scroll no-scrollbar prevent-select', {
             "translate-x-0": displayBlockListSidebar,
             "opacity-100": displayBlockListSidebar,
         })}>
-            {blockedWebsites.length ? <SwipeableList className='no-scrollbar'>
+            {blockedWebsites?.length ? <SwipeableList className='no-scrollbar'>
 
                 {blockedWebsites.map(x => (<SwipeableListItem
                     className='my-2'
@@ -123,7 +122,7 @@ const BlockListSidebar = () => {
                 </p>
             </div>}
 
-            {blockedWebsites.length ? <p className="text-center flex justify-center gap-1 items-center"><ArrowLeft />Swipe items to delete</p> : null}
+            {blockedWebsites?.length ? <p className="text-center flex justify-center gap-1 items-center"><ArrowLeft />Swipe items to delete</p> : null}
         </div>
     )
 }

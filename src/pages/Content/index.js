@@ -417,7 +417,7 @@ const generateHTML = (subtitle = "Don't forgot your goals", accessTime = 0) => {
             })
             .join("");
 
-          if (iteration >= element.dataset.value.length) {
+          if (iteration >= element.dataset.value?.length) {
             clearInterval(interval);
           }
 
@@ -525,7 +525,7 @@ const generateBlockPageHead = () => {
 }
 
 const generateRandomIndex = () => {
-  const MAX_RANGE = QUOTES.length;
+  const MAX_RANGE = QUOTES?.length;
   return Math.floor(Math.random() * MAX_RANGE)
 }
 /*
