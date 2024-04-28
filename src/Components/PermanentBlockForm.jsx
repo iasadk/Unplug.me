@@ -7,7 +7,7 @@ const PermanentBlockForm = () => {
     const { openInfoModal, mode, setForceRender, forceRerenderBlockList } = useUI();
     const [formData, setFormData] = useState({
         url: "",
-        mode
+        mode: mode || "permanent-block"
     });
     const [changeLockIcon, setChangeLockIcon] = useState(false)
     const handleSubmit = async (e) => {
@@ -28,6 +28,7 @@ const PermanentBlockForm = () => {
         }
         setFormData({
             url: "",
+            mode: "permanent-block"
         });
         setForceRender(!forceRerenderBlockList);
     }

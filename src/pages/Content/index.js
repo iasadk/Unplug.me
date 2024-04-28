@@ -583,6 +583,7 @@ const generateRandomIndex = () => {
     timerElement.style.right = initialX + "px";
     timerElement.style.padding = '10px';
     timerElement.style.background = '#fff';
+    timerElement.style.color = '#000';
     timerElement.style.border = '2px solid green';
     timerElement.style.borderRadius = '5px';
     timerElement.style.zIndex = 99999;
@@ -713,6 +714,7 @@ const generateRandomIndex = () => {
     timerElement.style.right = initialX + "px";
     timerElement.style.padding = '10px';
     timerElement.style.background = '#fff';
+    timerElement.style.color = '#000';
     timerElement.style.border = '2px solid green';
     timerElement.style.borderRadius = '5px';
     timerElement.style.zIndex = 99999;

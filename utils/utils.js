@@ -29,7 +29,7 @@ export const getUrlWithoutProtocol = (badUrl) => {
         return
     }
     const goodUrl = new URL(badUrl);
-    console.log(goodUrl, goodUrl.hostname)
+    // console.log(goodUrl, goodUrl.hostname)
     if (goodUrl) {
         return goodUrl.hostname
     }

@@ -2,7 +2,6 @@
   "manifest_version": 3,
   "name": "Unplug.me",
   "description": "Unplug.me: Your productivity ally. Break free from distractions, conquer procrastination, and unlock your full potential with this modern website blocker extension.",
-  "options_page": "options.html",
   "background": { "service_worker": "background.bundle.js" },
   "action": {},
   "icons": {
@@ -15,7 +14,6 @@
       "css": ["content.styles.css"]
     }
   ],
-  "devtools_page": "devtools.html",
   "web_accessible_resources": [
     {
       "resources": [

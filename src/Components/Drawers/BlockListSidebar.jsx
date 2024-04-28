@@ -34,7 +34,7 @@ const BlockListSidebar = () => {
         setAjxBlockList(true)
         chrome.storage.sync.get("key").then((res) => {
             setBlockedWebsites(res.key);
-            console.log(res.key)
+            console.log("Blocked websites: ", res.key)
         }
         ).catch(err => {
             console.log(err)
@@ -46,14 +46,13 @@ const BlockListSidebar = () => {
 
     const handleBlockList = (url) => {
         const leftWebsites = blockedWebsites.filter(web => web.url !== url);
+        console.log(leftWebsites, "LEFT WEB")
         chrome.storage.sync.set({ key: leftWebsites })
     }
 
     const trailingActions = () => {
         return (
-            <TrailingActions
-
-            >
+            <TrailingActions>
                 <SwipeAction
                     destructive={true}
                     onClick={() => console.info('swipe action triggered')}
@@ -76,15 +75,20 @@ const BlockListSidebar = () => {
             "translate-x-0": displayBlockListSidebar,
             "opacity-100": displayBlockListSidebar,
         })}>
-            {blockedWebsites?.length ? <SwipeableList className='no-scrollbar'>
+            {ajxBlockList ? <p>Loading...</p> : blockedWebsites?.length ? <SwipeableList className='no-scrollbar' >
 
                 {blockedWebsites.map(x => (<SwipeableListItem
                     className='my-2'
-                    onSwipeEnd={() => {
-                        handleBlockList(x.url)
+                    onSwipeProgress={(prog, _) => {
+                        if (prog >= 50) {
+                            handleBlockList(x.url)
+                        }
                     }}
+                    threshold={0.5}
+                    fullSwipe={true}
                     // leadingActions={leadingActions()}
                     trailingActions={trailingActions()}
+
                 >
                     <p className='flex items-center gap-3 bg-black/70 rounded-lg p-2 w-full'>
                         <img src={`https://www.google.com/s2/favicons?domain=${getUrlWithoutProtocol(x.url)}&sz=128`} className='w-8 h-8 rounded-full invert-1' alt='icon' />

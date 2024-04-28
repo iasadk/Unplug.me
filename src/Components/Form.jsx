@@ -11,7 +11,8 @@ const Form = () => {
         url: "",
         orgTime: 0,
         convertedTime: 0,
-        mode
+        mode: mode || "time-bomb"
+
     });
     const [changeLockIcon, setChangeLockIcon] = useState(false)
     const handleSubmit = async (e) => {
@@ -33,7 +34,8 @@ const Form = () => {
         setFormData({
             url: "",
             orgTime: 0,
-            convertedTime: 0
+            convertedTime: 0,
+            mode: "time-bomb"
         });
         setForceRender(!forceRerenderBlockList);
 
