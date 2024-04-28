@@ -6,12 +6,12 @@ import { sidebarContent } from '../Constants/sidebar';
 import { useUI } from '../context/ui.context';
 
 const Sidebar = () => {
-    const { setMode, mode, displayBlockListSidebar, closeBlockListSidebar, openBlockListSidebar } = useUI();
+    const { setMode, mode, displayBlockListSidebar, closeBlockListSidebar, openBlockListSidebar, openMainInfoModal } = useUI();
     const handleMode = (modeName) => {
         setMode(modeName);
     }
     return (
-        <div className='absolute top-0 left-0'>
+        <div className='absolute top-0 left-0 z-50'>
             <div className="flex h-screen w-16 flex-col justify-between  /*bg-[#1D171E]*/ bg-transparent relative">
                 <div>
                     {/*Sidebar Logo*/}
@@ -45,7 +45,7 @@ const Sidebar = () => {
                                             "cursor-not-allowed": x.disabled,
                                         })}
                                         onClick={() => {
-                                            handleMode(x.mode)
+                                            !x.disabled && handleMode(x.mode)
                                         }}
                                     >
                                         {x.icon}
@@ -87,6 +87,9 @@ const Sidebar = () => {
                     </p>
                     <p
                         className="t group relative flex justify-center rounded px-2 py-1.5 text-white cursor-pointer"
+                        onClick={() => {
+                            openMainInfoModal()
+                        }}
                     >
                         <Info className="w-[1.15rem] h-[1.15rem]" />
 

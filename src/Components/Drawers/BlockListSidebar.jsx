@@ -1,22 +1,20 @@
-import React, { useState } from 'react'
-import Sidebar from '../Sidebar'
-import { cn } from '../../../utils/cn'
-import { useUI } from '../../context/ui.context';
-import { Delete, Timer, Trash2 } from 'lucide-react';
 import dateFormat from "dateformat";
+import { ArrowLeft, Ban, OctagonX, Timer, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { cn } from '../../../utils/cn';
+import { useUI } from '../../context/ui.context';
 
+import { useEffect } from 'react';
 import {
-    LeadingActions,
     SwipeableList,
     SwipeableListItem,
     SwipeAction,
-    TrailingActions,
+    TrailingActions
 } from 'react-swipeable-list';
 import 'react-swipeable-list/dist/styles.css';
-import { useEffect } from 'react';
 import { getUrlWithoutProtocol } from '../../../utils/utils';
 const BlockListSidebar = () => {
-    const { displayBlockListSidebar, closeBlockListSidebar } = useUI();
+    const { displayBlockListSidebar, closeBlockListSidebar, forceRerenderBlockList } = useUI();
     const [blockedWebsites, setBlockedWebsites] = useState([]);
     const [ajxBlockList, setAjxBlockList] = useState(false)
     if (displayBlockListSidebar) {
@@ -45,13 +43,6 @@ const BlockListSidebar = () => {
         })
 
     }
-    // const leadingActions = () => (
-    //     <LeadingActions>
-    //         <SwipeAction onClick={() => console.info('swipe action triggered')}>
-    //             Action name
-    //         </SwipeAction>
-    //     </LeadingActions>
-    // );
 
     const handleBlockList = (url) => {
         const leftWebsites = blockedWebsites.filter(web => web.url !== url);
@@ -60,7 +51,6 @@ const BlockListSidebar = () => {
 
     const trailingActions = () => {
         return (
-
             <TrailingActions
 
             >
@@ -80,14 +70,14 @@ const BlockListSidebar = () => {
 
     useEffect(() => {
         fetchBlockedWebsites();
-    }, [displayBlockListSidebar])
-    // dev.to
+    }, [displayBlockListSidebar, forceRerenderBlockList])
+    console.log(blockedWebsites.length)
     return (
         <div className={cn('h-[95%] mt-4 w-[250px] bg-white bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 text-white absolute left-[75px] -translate-x-[300px] transition-all opacity-0 rounded-lg p-2 duration-300 flex flex-col  space-y-3 overflow-y-scroll no-scrollbar prevent-select', {
             "translate-x-0": displayBlockListSidebar,
             "opacity-100": displayBlockListSidebar,
         })}>
-            <SwipeableList className='no-scrollbar'>
+            {blockedWebsites.length ? <SwipeableList className='no-scrollbar'>
 
                 {blockedWebsites.map(x => (<SwipeableListItem
                     className='my-2'
@@ -98,7 +88,7 @@ const BlockListSidebar = () => {
                     trailingActions={trailingActions()}
                 >
                     <p className='flex items-center gap-3 bg-black/70 rounded-lg p-2 w-full'>
-                        <img src={`https://www.google.com/s2/favicons?domain=${getUrlWithoutProtocol(x.url).split('.').splice(1).join('.')}&sz=128`} className='w-8 h-8 rounded-full invert-1' alt='icon' />
+                        <img src={`https://www.google.com/s2/favicons?domain=${getUrlWithoutProtocol(x.url)}&sz=128`} className='w-8 h-8 rounded-full invert-1' alt='icon' />
                         <div className='flex justify-between w-full items-center'>
                             <div className='flex flex-col items-start'>
                                 <p className='font-semibold'>
@@ -108,20 +98,32 @@ const BlockListSidebar = () => {
                                     {dateFormat(x.createdAt || new Date(), "dd mmm, yyyy")}
                                 </p>
                             </div>
-                            <div className='flex flex-col items-center mt-1'>
+                            {x.mode === "time-bomb" ? <div className='flex flex-col items-center mt-1'>
                                 <p className='font-semibold'>
                                     <Timer className='w-4 h-4' />
                                 </p>
                                 <p className='text-white/50 text-[.7rem]'>
                                     {x.orgTime} min
                                 </p>
-                            </div>
+                            </div> : x.mode === "permanent-block" ? <div className='flex flex-col items-center mt-1'>
+                                <p className='font-semibold pr-1'>
+                                    <Ban className='w-4 h-4 text-red-500 font-medium' />
+                                </p>
+
+                            </div> : null}
                         </div>
                     </p>
                 </SwipeableListItem>
                 ))}
 
-            </SwipeableList>
+            </SwipeableList> : <div className='w-full h-full flex flex-col justify-center'>
+                <p className='w-full text-center flex flex-col justify-center'>
+                    <p className='flex justify-center'><OctagonX /></p>
+                    <p className='text-lg my-2 font-medium'>Blocklist is empty !!</p>
+                </p>
+            </div>}
+
+            {blockedWebsites.length ? <p className="text-center flex justify-center gap-1 items-center"><ArrowLeft />Swipe items to delete</p> : null}
         </div>
     )
 }

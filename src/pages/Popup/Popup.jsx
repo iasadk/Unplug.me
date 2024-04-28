@@ -6,6 +6,7 @@ import Timebomb from '../../Components/Timebomb';
 import Layout from './Layout';
 import './Popup.css';
 import { useUI } from '../../context/ui.context';
+import PermanentBlock from '../../Components/PermanentBlock';
 const Popup = () => {
   const { mode } = useUI();
   console.log("POP: ", mode)
@@ -19,6 +20,7 @@ const Popup = () => {
         </div>
         {mode === "home" && <Landing />}
         {mode === "time-bomb" && <Timebomb />}
+        {mode === "permanent-block" && <PermanentBlock />}
       </Container>
     </Layout>
   );

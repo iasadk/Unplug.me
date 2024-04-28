@@ -5,6 +5,9 @@ const URL_REGEX = new RegExp('^(https?:\\/\\/)?' + // validate protocol
     '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
     '(\\#[-a-z\\d_]*)?$', 'i');
 
+export const isValidURL = (url) => {
+    return URL_REGEX.test(url);
+}
 export const getMillisecondsFromTime = (time) => {
     return time * 60 * 1000;
 }
@@ -26,7 +29,7 @@ export const getUrlWithoutProtocol = (badUrl) => {
         return
     }
     const goodUrl = new URL(badUrl);
-    console.log(goodUrl)
+    console.log(goodUrl, goodUrl.hostname)
     if (goodUrl) {
         return goodUrl.hostname
     }

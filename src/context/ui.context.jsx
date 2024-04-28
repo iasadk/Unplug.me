@@ -3,8 +3,10 @@ import React from "react";
 
 const initialState = {
     displayInfoModal: false,
+    displayMainInfoModal: false,
     displayBlockListSidebar: false,
-    mode: "home"
+    mode: "home",
+    forceRerenderBlockList: true
 };
 
 export const UIContext = React.createContext(initialState);
@@ -25,6 +27,18 @@ function uiReducer(state, action) {
                 displayInfoModal: false,
             };
         }
+        case "OPEN_MAIN_INFO_MODAL": {
+            return {
+                ...state,
+                displayMainInfoModal: true,
+            };
+        }
+        case "CLOSE_MAIN_INFO_MODAL": {
+            return {
+                ...state,
+                displayMainInfoModal: false,
+            };
+        }
         case "OPEN_BLOCK_LIST_SIDEBAR": {
             return {
                 ...state,
@@ -43,6 +57,12 @@ function uiReducer(state, action) {
                 mode: action.mode,
             };
         }
+        case "SET_FORCE_RENDER_BLOCKLIST": {
+            return {
+                ...state,
+                forceRerenderBlockList: action.rerender,
+            };
+        }
         default:
             return null;
     }
@@ -54,10 +74,15 @@ export function UIProvider(props) {
 
     const openInfoModal = () => { dispatch({ type: "OPEN_INFO_MODAL" }); }
     const closeInfoModal = () => { dispatch({ type: "CLOSE_INFO_MODAL" }); }
+    const openMainInfoModal = () => { dispatch({ type: "OPEN_MAIN_INFO_MODAL" }); }
+    const closeMainInfoModal = () => { dispatch({ type: "CLOSE_MAIN_INFO_MODAL" }); }
     const openBlockListSidebar = () => { dispatch({ type: "OPEN_BLOCK_LIST_SIDEBAR" }); }
     const closeBlockListSidebar = () => { dispatch({ type: "CLOSE_BLOCK_LIST_SIDEBAR" }); }
     const setMode = (mode) => {
         dispatch({ type: "SET_MODE", mode });
+    }
+    const setForceRender = (rerender) => {
+        dispatch({ type: "SET_FORCE_RENDER_BLOCKLIST", rerender });
     }
 
     const value = React.useMemo(
@@ -67,7 +92,10 @@ export function UIProvider(props) {
             closeInfoModal,
             openBlockListSidebar,
             closeBlockListSidebar,
-            setMode
+            setMode,
+            openMainInfoModal,
+            closeMainInfoModal,
+            setForceRender
         }),
         [state]
     );

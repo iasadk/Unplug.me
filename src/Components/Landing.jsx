@@ -1,7 +1,9 @@
 import { ArrowUpRight } from 'lucide-react'
 import React from 'react'
+import { useUI } from '../context/ui.context';
 
 const Landing = () => {
+    const { setMode } = useUI();
     return (
         <div className="mx-auto max-w-screen-xl px-4 py-24 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl">
@@ -11,7 +13,9 @@ const Landing = () => {
                 </p>
 
                 <div className='flex justify-center mt-28'>
-                    <p className="flex gap-2 border border-white/50 rounded-3xl px-4 py-2 items-center hover:bg-white/90 hover:cursor-pointer transition-all bg-white group">
+                    <p className="flex gap-2 border border-white/50 rounded-3xl px-4 py-2 items-center hover:bg-white/90 hover:cursor-pointer transition-all bg-white group" onClick={() => {
+                        setMode("time-bomb")
+                    }}>
                         <span className='font-semibold text-black text-[1rem]'>Start Blocking Now!</span>
                         <ArrowUpRight className='w-4 h-4 group-hover:rotate-45 transition-transform' />
                     </p>

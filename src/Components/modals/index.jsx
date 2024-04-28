@@ -1,12 +1,14 @@
 import React from 'react'
 import InfoModal from './InfoModal'
 import { useUI } from '../../context/ui.context'
+import MainInfoModal from './MainInfoModal';
 
 const Modals = () => {
-    const { displayInfoModal, mode } = useUI();
+    const { displayInfoModal, displayMainInfoModal } = useUI();
     return (
         <div >
             {displayInfoModal && <InfoModal />}
+            {displayMainInfoModal && <MainInfoModal />}
         </div>
     )
 }

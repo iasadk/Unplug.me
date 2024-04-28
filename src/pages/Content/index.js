@@ -1,7 +1,7 @@
-import { printLine } from './modules/print';
+import { printLine, QUOTES } from './modules/print';
 
-console.log('Content script works!');
-console.log('Must reload extension for modifications to take effect.');
+// console.log('Content script works!');
+// console.log('Must reload extension for modifications to take effect.');
 
 // printLine("Using the 'printLine' function from the Print Module");
 // printLine("HEllo LIMIT");
@@ -14,7 +14,7 @@ function getAccessTime(timeInMillSec) {
 
   return formattedTime;
 }
-const generateHTML = (subtitle = "Don't forgot your goals", accessTime = null) => {
+const generateHTML = (subtitle = "Don't forgot your goals", accessTime = 0) => {
   return `
     <body>
     <main>
@@ -22,7 +22,7 @@ const generateHTML = (subtitle = "Don't forgot your goals", accessTime = null) =
       <section>
         <div class="text">
           <h1 data-value="404">BLOCKED</h1>
-          <a href="#" id="back" data-value=${subtitle}>${subtitle} - ${accessTime ? getAccessTime(accessTime) : null}</a>
+          <a href="#" id="back" data-value=${subtitle}>${subtitle} ${accessTime ? getAccessTime(accessTime) : ""}</a>
         </div>
       </section>
     </main>
@@ -524,6 +524,10 @@ const generateBlockPageHead = () => {
     `
 }
 
+const generateRandomIndex = () => {
+  const MAX_RANGE = QUOTES.length;
+  return Math.floor(Math.random() * MAX_RANGE)
+}
 /*
 ==================CASES===========================
 -> Match URL and Last block = null
@@ -539,26 +543,27 @@ const generateBlockPageHead = () => {
 
   const matchObj = syncData.find(x => window.location.href.includes(x.url));
 
-  if (matchObj?.url && !matchObj?.clearBlockScreenAt && !matchObj.blockTimerStartedAt) {
-    console.log("IN FIRST CONDITION")
-    timerToBlockWebsite(matchObj.convertedTime);
-  } else if (matchObj?.url && matchObj.blockTimerStartedAt && (Date.now() - matchObj?.blockTimerStartedAt) < matchObj.convertedTime) {
+  if (matchObj?.mode === "time-bomb") {
+    if (matchObj?.url && !matchObj?.clearBlockScreenAt && !matchObj.blockTimerStartedAt) {
+      timerToBlockWebsite(matchObj.convertedTime);
+    } else if (matchObj?.url && matchObj.blockTimerStartedAt && (Date.now() - matchObj?.blockTimerStartedAt) < matchObj.convertedTime) {
 
-    const timeLeftToBlockWebsite = matchObj.convertedTime - (Date.now() - matchObj?.blockTimerStartedAt);
-    console.log(timeLeftToBlockWebsite, "TIME LEFT", Math.floor(timeLeftToBlockWebsite / 1000), Date.now() - matchObj?.blockTimerStartedAt)
-    timerToBlockWebsite(timeLeftToBlockWebsite);
+      const timeLeftToBlockWebsite = matchObj.convertedTime - (Date.now() - matchObj?.blockTimerStartedAt);
+      timerToBlockWebsite(timeLeftToBlockWebsite);
 
 
-  } else if (matchObj?.url && matchObj?.clearBlockScreenAt && (matchObj?.clearBlockScreenAt - Date.now()) > 0) {
-    console.log("IN SECOND CONDITION")
-    const timeLeftToClearBlockScreen = matchObj?.clearBlockScreenAt - Date.now()
+    } else if (matchObj?.url && matchObj?.clearBlockScreenAt && (matchObj?.clearBlockScreenAt - Date.now()) > 0) {
+      const timeLeftToClearBlockScreen = matchObj?.clearBlockScreenAt - Date.now()
+      document.head.innerHTML = generateBlockPageHead();
+      document.body.innerHTML = generateHTML("Your block screen will clear at: ", matchObj?.clearBlockScreenAt);
+      startTimer(timeLeftToClearBlockScreen)
+    } else {
+      timerToBlockWebsite(matchObj.convertedTime);
+
+    }
+  } else if (matchObj?.mode === "permanent-block") {
     document.head.innerHTML = generateBlockPageHead();
-    document.body.innerHTML = generateHTML("Your block screen will clear at: ", matchObj?.clearBlockScreenAt);
-    startTimer(timeLeftToClearBlockScreen)
-  } else {
-    console.log("IN THIRD CONDITION")
-    timerToBlockWebsite(matchObj.convertedTime);
-
+    document.body.innerHTML = generateHTML(QUOTES[generateRandomIndex()]?.quote);
   }
 
   function startTimer(startTime) {
@@ -626,9 +631,6 @@ const generateBlockPageHead = () => {
         yOffset = currentY;
 
         setTranslate(currentX, currentY, timerElement);
-
-
-        console.log(xOffset + ' ' + yOffset)
       }
 
       function setTranslate(xPos, yPos, el) {
@@ -760,8 +762,6 @@ const generateBlockPageHead = () => {
 
         setTranslate(currentX, currentY, timerElement);
 
-
-        console.log(xOffset + ' ' + yOffset)
       }
 
       function setTranslate(xPos, yPos, el) {
@@ -815,110 +815,4 @@ const generateBlockPageHead = () => {
     }, startTime);
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function injectBlockPage(websiteBlockedAt) {
-    let newBody = document.createElement('body');
-
-    // Set inline styles for the new body
-    newBody.style.margin = '0';
-    newBody.style.padding = '0';
-    newBody.style.height = '100%';
-    newBody.style.overflow = 'hidden';
-
-    // Create a div for the blocked page
-    let blockedPageDiv = document.createElement('div');
-    blockedPageDiv.className = 'blocked-page';
-    blockedPageDiv.style.width = '100vw';
-    blockedPageDiv.style.height = '100vh';
-    blockedPageDiv.style.backgroundColor = 'red';
-    blockedPageDiv.style.display = 'flex';
-    blockedPageDiv.style.justifyContent = 'center';
-    blockedPageDiv.style.alignItems = 'center';
-
-    // Create the text element
-    let blockedText = document.createElement('div');
-    blockedText.className = 'blocked-text';
-    blockedText.style.fontSize = '48px';
-    blockedText.style.color = 'white';
-    blockedText.style.textAlign = 'center';
-    blockedText.textContent = 'BLOCKED!!!';
-
-    // Make a timer a run it:
-    let timerElement = document.createElement('div');
-    timerElement.setAttribute('id', 'timer');
-    timerElement.style.position = 'fixed';
-    timerElement.style.top = '10px';
-    timerElement.style.right = '10px';
-    timerElement.style.padding = '10px';
-    timerElement.style.background = '#fff';
-    timerElement.style.border = '2px solid green';
-    timerElement.style.borderRadius = '5px';
-    timerElement.style.zIndex = 99999;
-    timerElement.style.fontSize = "30px";
-
-    // // Update the timer display every second
-    // let timerInterval = setInterval(function () {
-    //     let endTime = Date.now() - websiteBlockedAt;
-    //     let remainingTime = BLOCK_TIME - endTime;
-    //     if (remainingTime <= 0) {
-    //         window.location.reload();
-    //         clearInterval(timerInterval);
-    //         timerElement.innerHTML = '00:00:00';
-    //         return;
-    //     }
-
-    //     let seconds = Math.floor(remainingTime / 1000);
-    //     if (seconds < 10) {
-    //         timerElement.style.border = '2px solid red';
-
-    //     }
-    //     let minutes = Math.floor(seconds / 60);
-    //     let hours = Math.floor(minutes / 60);
-
-    //     seconds %= 60;
-    //     minutes %= 60;
-
-    //     timerElement.innerHTML = `${ hours.toString().padStart(2, '0') }:${ minutes.toString().padStart(2, '0') }:${ seconds.toString().padStart(2, '0') } `;
-    // }, 1000);
-
-    blockedPageDiv.appendChild(timerElement);
-    // Append the text element to the blocked page div
-    blockedPageDiv.appendChild(blockedText);
-
-    // Append the blocked page div to the new body
-    newBody.appendChild(blockedPageDiv);
-
-    // Get the current body
-    let oldBody = document.body;
-
-    // Replace the old body with the new body
-    document.documentElement.replaceChild(newBody, oldBody);
-
-  }
 })()

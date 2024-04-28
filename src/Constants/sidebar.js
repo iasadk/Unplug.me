@@ -15,7 +15,7 @@ export const sidebarContent = [
         tooltipText: "Permanent block",
         icon: <OctagonX className='w-[1.15rem] h-[1.15rem]' />,
         mode: "permanent-block",
-        disabled: true,
+        disabled: false,
         disableTootipText: "Launching Soon !!"
     },
     {

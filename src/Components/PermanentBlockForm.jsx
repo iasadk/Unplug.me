@@ -1,22 +1,18 @@
-import { AlarmClockMinus, Link } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import { useUI } from '../context/ui.context'
-import { getClenUrl, getMillisecondsFromTime, isValidURL } from '../../utils/utils';
-import UnblockPadlock from '../../svgs/UnlockPadLock';
-import LockPadlock from '../../svgs/LockPadlock';
+import { Ban, Circle, Link } from 'lucide-react';
+import React, { useState } from 'react';
+import { getClenUrl, isValidURL } from '../../utils/utils';
+import { useUI } from '../context/ui.context';
 
-const Form = () => {
+const PermanentBlockForm = () => {
     const { openInfoModal, mode, setForceRender, forceRerenderBlockList } = useUI();
     const [formData, setFormData] = useState({
         url: "",
-        orgTime: 0,
-        convertedTime: 0,
         mode
     });
     const [changeLockIcon, setChangeLockIcon] = useState(false)
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.url || !formData.orgTime) {
+        if (!formData.url) {
             alert("Fill All values!!");
             return;
         }
@@ -26,26 +22,23 @@ const Form = () => {
         }
         const prevSyncData = (await chrome.storage.sync.get("key"))?.key;
         if (prevSyncData) {
-            await chrome.storage.sync.set({ "key": [...prevSyncData, { ...formData, createdAt: Date.now(), clearBlockScreenAt: null, blockTimerStartedAt: null }] });
+            await chrome.storage.sync.set({ "key": [...prevSyncData, { ...formData, createdAt: Date.now() }] });
         } else {
             await chrome.storage.sync.set({ "key": [formData] });
         }
         setFormData({
             url: "",
-            orgTime: 0,
-            convertedTime: 0
         });
         setForceRender(!forceRerenderBlockList);
-
     }
 
     return (
         <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-2xl">
-                <h1 class="text-center text-2xl font-bold text-white sm:text-6xl">Timelock</h1>
+                <h1 class="text-center text-2xl font-bold text-white sm:text-6xl">Permanent Block</h1>
 
                 <p class="mx-auto mt-4 max-w-md text-center text-white/50 text-lg ">
-                    Take control of your time. Set a time limit and break free from distractions. <span className='underline hover:text-white cursor-pointer' onClick={() => {
+                    Unlock Your Focus with Permanent Block - Take charge of your time, eliminate distractions, and reclaim productivity.<span className='underline hover:text-white cursor-pointer' onClick={() => {
                         openInfoModal();
                     }}>more info</span>
                 </p>
@@ -76,36 +69,9 @@ const Form = () => {
                         </div>
                     </div>
 
-                    <div>
-                        <label for="lock-after" class="sr-only">Lock after</label>
-
-                        <div class="relative flex justify-center w-[80%] mx-auto">
-                            <input
-                                value={formData.orgTime}
-                                type="number"
-                                class="w-full  rounded-lg p-4 pe-12 text-sm shadow-sm"
-                                placeholder="20 min"
-                                max={25}
-                                min={2}
-                                onChange={(e) => {
-                                    const convertedTime = getMillisecondsFromTime(Number(e.target.value));
-                                    setFormData({
-                                        ...formData,
-                                        orgTime: e.target.value,
-                                        convertedTime
-                                    })
-                                }}
-                            />
-
-                            <span class="absolute inset-y-0 end-0 grid place-content-center px-4 right-0">
-                                <AlarmClockMinus className='w-4 h-4 text-gray-700/50' />
-                            </span>
-                        </div>
-                    </div>
-
                     <button
                         type="submit"
-                        class="w-[80%] mx-auto rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white flex items-center justify-center gap-2"
+                        class="w-[80%] mx-auto rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white flex items-center justify-center gap-1"
                         onMouseEnter={() => {
                             setChangeLockIcon(true)
                         }}
@@ -113,7 +79,7 @@ const Form = () => {
                             setChangeLockIcon(false)
                         }}
                     >
-                        {!changeLockIcon ? <UnblockPadlock /> : <LockPadlock stroke="#F5060F" />} Lock
+                        {!changeLockIcon ? <Circle className='w-4 h-4' /> : <Ban className='w-4 h-4 text-red-500 font-medium' />} Block{!changeLockIcon ? <Circle className='w-4 h-4' /> : <Ban className='w-4 h-4 text-red-500 font-medium' />}
                     </button>
 
                 </form>
@@ -121,4 +87,4 @@ const Form = () => {
         </div>
     )
 }
-export default Form
+export default PermanentBlockForm

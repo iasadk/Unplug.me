@@ -3,6 +3,7 @@ import Drawers from '../../Components/Drawers'
 import Sidebar from '../../Components/Sidebar'
 import Modals from '../../Components/modals'
 import { ManagedUIContext } from '../../context/ui.context'
+import BottomStripe from '../../Components/BottomStripe'
 
 const Layout = ({ children }) => {
     return (
@@ -11,6 +12,7 @@ const Layout = ({ children }) => {
             <Drawers />
             <Sidebar />
             {children}
+            <BottomStripe />
         </div>
 
     )
